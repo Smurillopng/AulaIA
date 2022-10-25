@@ -20,12 +20,6 @@ public class SlimeIA : MonoBehaviour
     [HideInInspector] public Vector2 playerDirection;
     [HideInInspector] public Rigidbody2D rb;
     [HideInInspector] public Animator animator;
-    private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
-    private static readonly int IsWalking = Animator.StringToHash("isWalking");
-    private static readonly int IsIdle = Animator.StringToHash("isIdle");
-    private static readonly int Y = Animator.StringToHash("Y");
-    private static readonly int X = Animator.StringToHash("X");
-    private static readonly int IsDead = Animator.StringToHash("isDead");
 
     private void Awake() => player = GameObject.FindGameObjectWithTag("Player");
 
@@ -45,33 +39,31 @@ public class SlimeIA : MonoBehaviour
         switch(state)
         {
             case States.Idle:
-                animator.SetBool(IsAttacking, false);
-                animator.SetBool(IsWalking, false);
-                animator.SetBool(IsIdle, true);
+                animator.SetBool("isAttacking", false);
+                animator.SetBool("isWalking", false);
+                animator.SetBool("isIdle", true);
                 break;
             case States.Walk:
-                animator.SetBool(IsAttacking, false);
-                animator.SetBool(IsIdle, false);
-                animator.SetBool(IsWalking, true);
+                animator.SetBool("isAttacking", false);
+                animator.SetBool("isIdle", false);
+                animator.SetBool("isWalking", true);
                 rb.MovePosition(rb.position + (playerDirection.normalized * (walkSpeed * Time.fixedDeltaTime)));
                 break;
             case States.Attack:
-                animator.SetBool(IsIdle, false);
-                animator.SetBool(IsWalking, false);
-                animator.SetBool(IsAttacking, true);
+                animator.SetBool("isIdle", false);
+                animator.SetBool("isWalking", false);
+                animator.SetBool("isAttacking", true);
                 rb.MovePosition(rb.position + (playerDirection.normalized * (attackSpeed * Time.fixedDeltaTime)));
                 break;
         }
     }
-
-    protected virtual void Move()
+    
+    public virtual void Move()
     {
-        var position = transform.position;
-        distanceToPlayer = Vector2.Distance(position, player.transform.position);
-        animator.SetFloat(X, playerDirection.x);
-        animator.SetFloat(Y, playerDirection.y);
-        position = new Vector3(position.x, position.y, 0);
-        transform.position = position;
+        distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
+        animator.SetFloat("X", playerDirection.x);
+        animator.SetFloat("Y", playerDirection.y);
+        transform.position = new Vector3(transform.position.x, transform.position.y, 0);
 
         switch(state)
         {
@@ -110,7 +102,7 @@ public class SlimeIA : MonoBehaviour
         timer -= Time.deltaTime;
     }
 
-    public void Kill() => animator.SetBool(IsDead, true);
+    public void Kill() => animator.SetBool("isDead", true);
     public void Destroy() => Destroy(gameObject);
 
     public void StartAttacking() => attackTrigger.enabled = true;

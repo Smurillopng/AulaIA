@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 813255549680279051}
   - component: {fileID: 8675866490360600794}
-  - component: {fileID: 8447733076362151507}
-  - component: {fileID: 6610932899617238423}
   - component: {fileID: 1202959935943864014}
   - component: {fileID: 6046965868933793066}
+  - component: {fileID: -5391299843434121300}
   - component: {fileID: -609514311952080545}
+  - component: {fileID: 8109050164499934200}
   m_Layer: 3
   m_Name: Orc
   m_TagString: Orc
@@ -86,54 +86,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
---- !u!50 &8447733076362151507
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9196962442324405014}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
---- !u!61 &6610932899617238423
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9196962442324405014}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.001532197, y: 0.5}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.5068685, y: 0.74894434}
-  m_EdgeRadius: 0
+  m_SpriteSortPoint: 1
 --- !u!61 &1202959935943864014
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -179,6 +132,33 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-5391299843434121300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9196962442324405014}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 191191a84bdba244ca6ba251fa03e2a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  walkSpeed: 3
+  timerMin: 0.3
+  timerMax: 0.8
+  dist: 6
+  distAttack: 1
+  attackSpeed: 1
+  attackTrigger: {fileID: 1202959935943864014}
+  isAttacking: 0
+  state: 0
+  distanceToPlayer: 1000
+  timer: 0
+  playerDirection: {x: 0, y: 0}
+  rb: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!114 &-609514311952080545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,6 +171,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b335588a128f69a48a749730a7b8c576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedWalk: 5
-  smoothDamp: 5
-  perceptionDistance: 1
+  positionOrigin: {x: 16.8, y: 14.839999}
+  positionFinal: {x: 50.12, y: 35.16}
+  speedWalk: 3.2
+  smoothDamp: 1.44
+  perceptionDistance: 7.1
+  fovAngle: 166
+  separationDistance: 0.5
+  cohesionWeight: 0
+  alignmentWeight: 1
+  separationWeight: 0
+  angMean: 140
+  angDelta: 0
+--- !u!50 &8109050164499934200
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9196962442324405014}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

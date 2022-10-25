@@ -1,13 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CharMove : MonoBehaviour
 {
     [SerializeField] private float speed;
 
-    private Sprite m_Player;
-    private Rigidbody2D m_Rb;
-    private Vector2 m_MoveVelocity;
-    private Animator m_Animator;
+    private Sprite _player;
+    private Rigidbody2D _rb;
+    private Vector2 _moveVelocity;
+    private Animator _animator;
     public int playerHealth;
     public Collider2D attackCollider;
     private static readonly int X = Animator.StringToHash("X");
@@ -19,13 +21,13 @@ public class CharMove : MonoBehaviour
     private void Start() 
     {
         playerHealth = GetComponent<Health>().maxHealth;
-        m_Rb = GetComponent<Rigidbody2D>();
-        m_Animator = GetComponent<Animator>();
+        _rb = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
     }
     private void Update()
     {
-        m_MoveVelocity.x = Input.GetAxis("Horizontal");
-        m_MoveVelocity.y = Input.GetAxis("Vertical");
+        _moveVelocity.x = Input.GetAxis("Horizontal");
+        _moveVelocity.y = Input.GetAxis("Vertical");
         Attack();
     }
     private void FixedUpdate() 
@@ -35,20 +37,20 @@ public class CharMove : MonoBehaviour
 
     private void Move()
     {
-        Vector2 move = new Vector2(m_MoveVelocity.x, m_MoveVelocity.y).normalized;
-        m_Rb.MovePosition(m_Rb.position + (move * (speed * Time.fixedDeltaTime)));
+        Vector2 move = new Vector2(_moveVelocity.x, _moveVelocity.y).normalized;
+        _rb.MovePosition(_rb.position + (move * (speed * Time.fixedDeltaTime)));
 
         if (move != Vector2.zero)
         {
-            m_Animator.SetFloat(X, move.x);
-            m_Animator.SetFloat(Y, move.y);
-            m_Animator.SetBool(IsIdle, false);
-            m_Animator.SetBool(IsWalking, true);
+            _animator.SetFloat(X, move.x);
+            _animator.SetFloat(Y, move.y);
+            _animator.SetBool(IsIdle, false);
+            _animator.SetBool(IsWalking, true);
         }
         else
         {
-            m_Animator.SetBool(IsWalking, false);
-            m_Animator.SetBool(IsIdle, true);
+            _animator.SetBool(IsWalking, false);
+            _animator.SetBool(IsIdle, true);
         }
     }
 
@@ -56,11 +58,11 @@ public class CharMove : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            m_Animator.SetBool(IsAttacking, true);
+            _animator.SetBool(IsAttacking, true);
         }
         else if (Input.GetKeyUp(KeyCode.Space))
         {
-            m_Animator.SetBool(IsAttacking, false);
+            _animator.SetBool(IsAttacking, false);
         }
     }
 
@@ -90,7 +92,7 @@ public class CharMove : MonoBehaviour
 
             if (attackCollider.enabled)
             {
-                other.GetComponent<OrcIA>().Kill();
+                //other.GetComponent<OrcMovement>().Kill();
             }
         }
     }

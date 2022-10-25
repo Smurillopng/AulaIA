@@ -1,105 +1,165 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class OrcMovement : MonoBehaviour
 {
     #region Internas
+    Rigidbody2D _rb;
 
-    private Rigidbody2D m_Rb;
-    private Vector2 m_Movement;
-    //private Vector2 m_PosicaoOrigem = new Vector2(-16, -11);
-    //private Vector2 m_PosicaoFinal = new Vector2(10, 10);
-    private Vector2 m_Cohesion;
-    private Vector2 m_CurrentSpeed;
-    private float m_PerceptionDistanceSqr;
+    Vector2 _movement;
     
+    Vector2 _cohesion;
+    Vector2 _currentSpeed;
+    Vector2 _alignment;
+    Vector2 _separation;
+
+    float _perceptionDistanceSqr;
+    float _separationDistanceSqr;
     #endregion
 
-    #region Calibração
-    
-    [Header("Orc Movement")]
+    #region Calibracao
+    [Header("Position")]
+    [SerializeField] Vector2 positionOrigin = new Vector2(-16, -11);
+    [SerializeField] Vector2 positionFinal = new Vector2(10, 10);
+
+    [Header("Boss Movement")]
     [Range(0f, 10f)] [SerializeField] private float speedWalk = 3f;
     [Range(1f, 5f)] [SerializeField] private float smoothDamp = 1f;
 
     [Header("Detection")]
     [Range(0f, 10f)] [SerializeField] private float perceptionDistance = 5f;
-    
+    [Range(0, 360)] [SerializeField] private int fovAngle = 270;
+    [Range(0f, 10f)] [SerializeField] private float separationDistance = 5f;
+
+    [Header("Weights")]
+    [Range(0f, 1f)] [SerializeField] float cohesionWeight;
+    [Range(0f, 1f)] [SerializeField] float alignmentWeight;
+    [Range(0f, 1f)] [SerializeField] float separationWeight;
+
+    [Header("Initial Angles")]
+    [Range(0f, 360f)] [SerializeField] float angMean = 0f;
+    [Range(0f, 360f)] [SerializeField] float angDelta = 360f;
     #endregion
 
     #region Unity Methods
-    
-    private void Awake()
+    private void OnDrawGizmos()
     {
-        m_Rb = GetComponent<Rigidbody2D>();
+        Gizmos.DrawLine(new Vector3(positionOrigin.x, positionOrigin.y, 0), new Vector3(positionFinal.x, positionFinal.y, 0));
     }
 
-    private void Start()
+    private void Awake()
     {
-        var ang = Random.Range(0, 2 * Mathf.PI);
-        m_Movement.x = Mathf.Cos(ang);
-        m_Movement.y = Mathf.Sin(ang);
+        _rb = GetComponent<Rigidbody2D>();
+    }
 
-        m_PerceptionDistanceSqr = Mathf.Pow(perceptionDistance, 2);
+    void Start()
+    {
+        var angMeanRad = angMean * Mathf.PI / 180;
+        var angDeltaRad = angDelta * Mathf.PI / 180;
+        var angMin = angMeanRad - angDeltaRad / 2;
+        var angMax = angMeanRad + angDeltaRad / 2;
+        var ang = Random.Range(angMin, angMax);
+        _movement.x = Mathf.Cos(ang);
+        _movement.y = Mathf.Sin(ang);
+
+        _perceptionDistanceSqr = Mathf.Pow(perceptionDistance, 2);
+        _separationDistanceSqr = Mathf.Pow(separationDistance, 2);
     }
 
     private void Update()
     {
+        Reflect();
         Perception();
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         Move();
     }
-    
     #endregion
 
     #region Methods
-    
     private void Move()
     {
-        m_Rb.MovePosition(m_Rb.position + m_Movement * (speedWalk * Time.fixedDeltaTime));
+        _rb.MovePosition(_rb.position + _movement * speedWalk * Time.fixedDeltaTime);
+    }
+
+    private void Reflect()
+    {
+        var nextX = _rb.position.x + _movement.x * speedWalk * Time.fixedDeltaTime;
+        var nextY = _rb.position.y + _movement.y * speedWalk * Time.fixedDeltaTime;
+
+        if (nextX <= positionOrigin.x || nextX >= positionFinal.x)
+        {
+            _movement.x = -_movement.x;
+        }
+
+        if (nextY <= positionOrigin.y || nextY >= positionFinal.y)
+        {
+            _movement.y = -_movement.y;
+        }
     }
 
     private void Perception()
     {
-        m_Cohesion = Vector2.zero;
-        int numeroDeOrcs = 0;
-        var orcs = GameObject.FindGameObjectsWithTag("Orc");
+        _cohesion = Vector2.zero;
+        _alignment = Vector2.zero;
+        _separation = Vector2.zero;
 
-        foreach (var orc in orcs)
+        int numberBosses = 0;
+        var bosses = GameObject.FindGameObjectsWithTag("Orc");
+
+        foreach (var boss in bosses)
         {
-            if (orc != gameObject)
+            if (boss != this)
             {
-                Vector2 distance = orc.transform.position - this.transform.position;
+                Vector2 distance = boss.transform.position - this.transform.position;
 
                 float distSqr = Vector2.SqrMagnitude(distance);
-                if (distSqr <= m_PerceptionDistanceSqr)
+                if (distSqr <= _perceptionDistanceSqr)
                 {
-                    m_Cohesion += distance;
-                    numeroDeOrcs++;
+                    var angle = Vector2.Angle(_movement, distance);
+                    if (angle < fovAngle / 2)
+                    {
+                        _cohesion += distance;
+                        _alignment += boss.GetComponent<OrcMovement>()._movement;
+
+                        numberBosses++;
+                    }
+
+                    if (distSqr <= _separationDistanceSqr)
+                    {
+                        _separation -= distance.normalized * separationDistance;
+                    }
                 }
             }
         }
 
-        if (numeroDeOrcs > 0)
+        if (numberBosses > 0)
         {
-            m_Cohesion /= numeroDeOrcs;
-            m_Cohesion = m_Cohesion.normalized;
-        }
+            _cohesion /= numberBosses;
 
-        m_Movement = Vector2.SmoothDamp(m_Movement, m_Cohesion, ref m_CurrentSpeed, smoothDamp);
-        m_Movement = m_Movement.normalized;
+            _alignment /= numberBosses;
+            _alignment *= speedWalk;
+
+            _separation /= numberBosses;
+
+            Vector2 moveVector = ( (_cohesion * cohesionWeight) + (_alignment * alignmentWeight) + (_separation * separationWeight) ) / 3;
+            moveVector /= (cohesionWeight + alignmentWeight + separationWeight);
+            moveVector = moveVector.normalized;
+            //_cohesion = _cohesion.normalized;
+
+            _movement = Vector2.SmoothDamp(_movement, moveVector, ref _currentSpeed, smoothDamp);
+            _movement = _movement.normalized;
+        }
     }
-    
     #endregion
 
     #region Events
-     
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        m_Movement = Vector2.Reflect(m_Movement, collision.contacts[0].normal);
-    }
-    
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    _movement = Vector2.Reflect(_movement, collision.GetContact(0).normal);
+    //}
     #endregion
 }

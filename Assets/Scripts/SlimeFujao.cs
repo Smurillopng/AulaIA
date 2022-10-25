@@ -3,17 +3,12 @@
 public class SlimeFujao : SlimeIA
 {
     public int speed;
-    private static readonly int Y = Animator.StringToHash("Y");
-    private static readonly int X = Animator.StringToHash("X");
-
-    protected override void Move()
+    public override void Move()
     {
-        var position = transform.position;
-        distanceToPlayer = Vector2.Distance(position, player.transform.position);
-        animator.SetFloat(X, playerDirection.x);
-        animator.SetFloat(Y, playerDirection.y);
-        position = new Vector3(position.x, position.y, 0);
-        transform.position = position;
+        distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
+        animator.SetFloat("X", playerDirection.x);
+        animator.SetFloat("Y", playerDirection.y);
+        transform.position = new Vector3(transform.position.x, transform.position.y, 0);
 
         switch(state)
         {

@@ -479,8 +479,8 @@ GameObject:
   - component: {fileID: 1508686613920704526}
   - component: {fileID: 1508686613920704527}
   - component: {fileID: 1508686613920704561}
-  - component: {fileID: 1508686613920704562}
   - component: {fileID: 1508686613920704524}
+  - component: {fileID: 1508686613920704562}
   - component: {fileID: 1508686613920704560}
   - component: {fileID: 1508686613920704563}
   - component: {fileID: 6401401601103075537}
@@ -557,7 +557,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!50 &1508686613920704561
 Rigidbody2D:
   serializedVersion: 4
@@ -579,21 +579,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &1508686613920704562
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1508686613920704525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fee311ddcf8fc24485442907abcbe94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 20
-  healthSlider: {fileID: 1508686613236638320}
-  posicaoDaVida: {x: 0.1, y: 1.2, z: 0}
 --- !u!114 &1508686613920704524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -609,6 +594,21 @@ MonoBehaviour:
   speed: 4
   playerHealth: 0
   attackCollider: {fileID: 6401401601103075537}
+--- !u!114 &1508686613920704562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508686613920704525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fee311ddcf8fc24485442907abcbe94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 20
+  healthSlider: {fileID: 1508686613236638320}
+  healthPosition: {x: 0, y: 0, z: 0}
 --- !u!95 &1508686613920704560
 Animator:
   serializedVersion: 3
@@ -644,7 +644,7 @@ BoxCollider2D:
   m_Offset: {x: -0.00021800399, y: 0.0006541014}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0.5, y: 0}
     oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
@@ -670,7 +670,7 @@ BoxCollider2D:
   m_Offset: {x: 0.0035343468, y: 0.0053014755}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0.5, y: 0}
     oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5

@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -5,13 +7,12 @@ public class Health : MonoBehaviour
 {
     public int maxHealth;
     public Slider healthSlider;
-    public Vector3 posicaoDaVida;
+    public Vector3 healthPosition;
 
     private void Update()
     {
-        healthSlider.maxValue = maxHealth;
         healthSlider.value = GetComponent<CharMove>().playerHealth;
 
-        healthSlider.transform.position = transform.position + posicaoDaVida;
+        healthSlider.transform.position = transform.position + healthPosition;
     }
 }

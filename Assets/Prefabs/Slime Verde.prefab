@@ -87,6 +87,10 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 5292906822559154751, guid: 7cd0b667231d1814796953c2e080be82, type: 3}
+      propertyPath: m_SpriteSortPoint
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5611298133484709315, guid: 7cd0b667231d1814796953c2e080be82, type: 3}
       propertyPath: player
       value: 
@@ -105,7 +109,6 @@ PrefabInstance:
       objectReference: {fileID: 9071844987304052583}
     m_RemovedComponents:
     - {fileID: 5571328722086941427, guid: 7cd0b667231d1814796953c2e080be82, type: 3}
-    - {fileID: 5611298133484709315, guid: 7cd0b667231d1814796953c2e080be82, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7cd0b667231d1814796953c2e080be82, type: 3}
 --- !u!1 &9071844987304052590 stripped
 GameObject:
